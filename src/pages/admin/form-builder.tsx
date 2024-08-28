@@ -55,7 +55,6 @@ interface State extends SnackbarOrigin {
 }
 
 const FormBuilder: React.FC = () => {
-  // const [fields, setFields] = useState<Field[]>([]);
   const [editingField, setEditingField] = useState<Field | null>(null);
   const [selectedEmoji, setSelectedEmoji] = useState("");
   const [rating, setRating] = useState(0);
@@ -464,7 +463,8 @@ const FormBuilder: React.FC = () => {
               backgroundColor: "#fff",
               boxShadow: 3,
               borderRadius: 2,
-              width: "70%",
+              width: "31rem",
+              maxWidth: "100%",
               height: "90%",
               overflowY: "auto",
             }}
@@ -475,9 +475,9 @@ const FormBuilder: React.FC = () => {
               color="textSecondary"
               gutterBottom
               sx={{
-                position: "sticky", // Makes the title sticky
-                top: 0, // Sticks to the top
-                zIndex: 1000, // Ensures it stays above other content when scrolling
+                position: "sticky",
+                top: 0, 
+                zIndex: 1000, 
               }}
             >
               <div className="flex text-white w-full">

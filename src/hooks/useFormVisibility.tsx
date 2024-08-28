@@ -16,7 +16,7 @@ export const useFormVisibility = () => {
   useEffect(() => {
     dispatch(fetchFeedbackForms());
     if (typeof window !== "undefined") {
-      setCurrentUrl(window.location.pathname);
+      setCurrentUrl(window.location.href);
       const date = new Date();
       setCurrentDate(date.toISOString().split("T")[0]);
       setCurrentTime(date.toTimeString().split(" ")[0].slice(0, 5));
@@ -27,14 +27,14 @@ export const useFormVisibility = () => {
     return forms.find((form) => {
       const { url, date, time } = form.condition || {};
 
-      let storedIds = localStorage.getItem("submitedFormIds");
-      let submitFormIds = storedIds ? JSON.parse(storedIds) : [];
+      const storedIds = localStorage.getItem("submitedFormIds");
+      const submitFormIds = storedIds ? JSON.parse(storedIds) : [];
 
       if (submitFormIds.includes(form.id)) {
         return false;
       }
 
-      const conditions = [];
+      const conditions: boolean[] = [];
 
       if (url !== undefined && url !== "") {
         conditions.push(currentUrl.includes(url));
@@ -48,11 +48,7 @@ export const useFormVisibility = () => {
         conditions.push(currentTime >= time);
       }
 
-      if (conditions.length === 1) {
-        return conditions[0];
-      }
-
-      return conditions.length > 1 ? conditions.every(Boolean) : false;
+      return conditions.every(Boolean);
     });
   };
 
@@ -79,7 +75,7 @@ export const useFormVisibility = () => {
       } else {
         setModalOpen(false);
       }
-    }, 60000);
+    }, 30000);
 
     return () => clearInterval(interval);
     // }
