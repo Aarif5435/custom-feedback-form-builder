@@ -63,7 +63,7 @@ export default function LogInComp() {
   const [error, setError] = useState("");
   const [loginMethod, setLoginMethod] = useState("password");
   const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState('')
+  const [success, setSuccess] = useState("");
   const router = useRouter();
   const [timeLeft, setTimeLeft] = useState(300); // Initial time in seconds (5 minutes)
   const [isActive, setIsActive] = useState(true); // Track if countdown is active
@@ -94,7 +94,10 @@ export default function LogInComp() {
   const formatTime = (time: number) => {
     const minutes = Math.floor(time / 60);
     const seconds = time % 60;
-    return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(
+      2,
+      "0"
+    )}`;
   };
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -127,28 +130,28 @@ export default function LogInComp() {
           setEmail("");
           setPassword("");
           setLoading(false);
-          localStorage.setItem('accessTokenFD', data.token)
+          localStorage.setItem("accessTokenFD", data.token);
           router.push("/admin/dashboard");
         } else {
           setLoading(false);
           showToast("error", "invalid credential");
         }
-      }else{
-        const res = await fetch('/api/auth/verify-otp',{
-          method: 'POST',
+      } else {
+        const res = await fetch("/api/auth/verify-otp", {
+          method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({ email, otp }),
         });
 
-        if(res.ok){
+        if (res.ok) {
           const data = await res.json();
-          localStorage.setItem('accessTokenFD', data.token);
-          showToast('success', data.message);
-          router.push('./admin/dashboard')
-        }else{
-          showToast('error', "Something went wrong");
+          localStorage.setItem("accessTokenFD", data.token);
+          showToast("success", data.message);
+          router.push("./admin/dashboard");
+        } else {
+          showToast("error", "Something went wrong");
         }
       }
       setLoading(false);
@@ -164,33 +167,33 @@ export default function LogInComp() {
     if (!email) {
       setError("Please enter your email to receive OTP");
       return;
-    };
-   try{
-    setLoading(true);
-    handleStartCountdown();
-    setSuccess('')
-    const res = await fetch("/api/auth/request-otp", {
-      method: 'POST',
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email }),
-    });
-
-    if(res.ok){
-      const data = await res.json()
-      showToast('success',data.message );
-      setSuccess('An OTP sent to you mail address');
-      setLoading(false)
-    }else{
-      const data = await res.json()
-      showToast('error',data.message );
-      setLoading(false)
     }
-   }catch(err: any){
-    showToast('error',err );
-    setLoading(false)
-   }
+    try {
+      setLoading(true);
+      handleStartCountdown();
+      setSuccess("");
+      const res = await fetch("/api/auth/request-otp", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email }),
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        showToast("success", data.message);
+        setSuccess("An OTP sent to you mail address");
+        setLoading(false);
+      } else {
+        const data = await res.json();
+        showToast("error", data.message);
+        setLoading(false);
+      }
+    } catch (err: any) {
+      showToast("error", err);
+      setLoading(false);
+    }
   };
 
   return (
@@ -294,7 +297,7 @@ export default function LogInComp() {
                     className="pl-10 bg-white bg-opacity-10 border-gray-600 text-white placeholder-gray-400"
                   />
                 </div>
-                  
+
                 <Button
                   loading={loading}
                   type="button"
@@ -312,11 +315,24 @@ export default function LogInComp() {
                     type="text"
                     placeholder="Enter OTP"
                     value={otp}
-                    onChange={(e: any) => {setOtp(e.target.value)}}
+                    onChange={(e: any) => {
+                      setOtp(e.target.value);
+                    }}
                     className="pl-10 bg-white bg-opacity-10 border-gray-600 text-white placeholder-gray-400"
                   />
                 </div>
-                {success && timeLeft !== 0 && <span className="text-[12px] text-green-500" >{success}, It will be expire in <b className={`text-white ${timeLeft < 25 && 'text-red-500'}`}>{formatTime(timeLeft)}</b></span>}
+                {success && timeLeft !== 0 && (
+                  <span className="text-[12px] text-green-500">
+                    {success}, It will be expire in{" "}
+                    <b
+                      className={`text-white ${
+                        timeLeft < 25 && "text-red-500"
+                      }`}
+                    >
+                      {formatTime(timeLeft)}
+                    </b>
+                  </span>
+                )}
                 {error && <p className="text-red-500 text-sm">{error}</p>}
                 <Button
                   loading={loading}
