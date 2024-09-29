@@ -164,7 +164,6 @@ export default function LogInComp() {
   };
 
   const handleSendOtp = async () => {
-    
     if (!email) {
       setError("Please enter your email to receive OTP");
       return;
@@ -196,7 +195,6 @@ export default function LogInComp() {
       showToast("error", err);
       setLoading(false);
     }
-
   };
 
   return (
