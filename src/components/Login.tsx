@@ -354,7 +354,7 @@ export default function LogInComp() {
           </div>
           <div className="mt-6 text-center">
             <p className="text-gray-400">
-              Don't have an account?{" "}
+              Don&apos;s have an account?
               <Link href="/signup" className="text-white hover:underline">
                 Sign up
               </Link>
