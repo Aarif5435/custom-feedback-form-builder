@@ -164,10 +164,12 @@ export default function LogInComp() {
   };
 
   const handleSendOtp = async () => {
+    
     if (!email) {
       setError("Please enter your email to receive OTP");
       return;
     }
+
     try {
       setLoading(true);
       handleStartCountdown();
@@ -194,6 +196,7 @@ export default function LogInComp() {
       showToast("error", err);
       setLoading(false);
     }
+
   };
 
   return (
@@ -354,7 +357,7 @@ export default function LogInComp() {
           </div>
           <div className="mt-6 text-center">
             <p className="text-gray-400">
-              Don&apos;s have an account?
+              Don&apos;t have an account?
               <Link href="/signup" className="text-white hover:underline">
                 Sign up
               </Link>
