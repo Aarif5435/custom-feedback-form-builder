@@ -1,5 +1,5 @@
+import prisma from '@/db';
 import nodemailer from 'nodemailer';
-import prisma from "@/lib/prisma";
 
 
 function generateOtp(): string {

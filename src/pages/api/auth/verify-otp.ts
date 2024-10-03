@@ -1,7 +1,7 @@
 import { verifyOtp } from "@/lib/auth/verifyOtp";
-import prisma from "@/lib/prisma";
 import { NextApiRequest, NextApiResponse } from "next";
 import jwt from "jsonwebtoken";
+import prisma from "@/db";
 
 const jwtSecret = process.env.JWT_SECRET as string;
 
@@ -34,8 +34,8 @@ export default async function handler(req:NextApiRequest, res: NextApiResponse){
        try {
       const result = await verifyOtp(email, otp);
       if(result.ok){
-
-        return res.status(200).json({ message: result.message, token});
+        res.setHeader('Set-Cookie', `token=${token}; HttpOnly; Path=/; Max-Age=3600;`);
+        return res.status(200).json({ message: result.message, token, userId: user.id});
       }else{
         return res.status(401).json({message: result.message || 'OTP not verified'});
       }

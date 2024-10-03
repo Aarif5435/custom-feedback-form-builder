@@ -11,6 +11,9 @@ import { useRouter } from "next/router";
 import { toast, ToastContainer } from "material-react-toastify";
 import "material-react-toastify/dist/ReactToastify.css";
 import { showToast } from "./ui/toast";
+import { useSelector, useDispatch } from "react-redux";
+import { AppDispatch, RootState } from "../redux/store";
+import { getUserDetailAsync } from "@/redux/usersSlice";
 
 const AnimatedIllustration = () => {
   return (
@@ -67,6 +70,8 @@ export default function LogInComp() {
   const router = useRouter();
   const [timeLeft, setTimeLeft] = useState(300); // Initial time in seconds (5 minutes)
   const [isActive, setIsActive] = useState(true); // Track if countdown is active
+  const dispatch: AppDispatch = useDispatch();
+
 
   useEffect(() => {
     let interval: NodeJS.Timeout | null = null;
@@ -130,8 +135,9 @@ export default function LogInComp() {
           setEmail("");
           setPassword("");
           setLoading(false);
+          dispatch(getUserDetailAsync(data.userId));
           localStorage.setItem("accessTokenFD", data.token);
-          router.push("/admin/dashboard");
+          router.push(`${data.userId}`);
         } else {
           setLoading(false);
           showToast("error", "invalid credential");
@@ -149,7 +155,9 @@ export default function LogInComp() {
           const data = await res.json();
           localStorage.setItem("accessTokenFD", data.token);
           showToast("success", data.message);
-          router.push("./admin/dashboard");
+          dispatch(getUserDetailAsync(data.userId));
+          console.log('dataaaaaa',data)
+          router.push(`${data.userId}`);
         } else {
           showToast("error", "Something went wrong");
         }

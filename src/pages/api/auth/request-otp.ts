@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { createOtpForUser } from '@/lib/auth/sendEmail';
-import prisma from "@/lib/prisma";
+import prisma from "@/db";
 
 
 

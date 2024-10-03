@@ -5,6 +5,8 @@ import { motion, useAnimation } from "framer-motion";
 import { Star, MessageSquare, Sliders, BarChart2, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { isAuthenticated } from "@/lib/auth/authCheck";
+import { useRouter } from "next/router";
 
 const ParticleAnimation = () => {
   const count = 100;
@@ -52,6 +54,7 @@ const ParticleAnimation = () => {
 
 export function LandingPage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
 
   const fadeInUp = {
     initial: { opacity: 0, y: 60 },

@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import prisma from "@/lib/prisma";
+import prisma from "@/db";
 
 const jwtSecret = process.env.JWT_SECRET as string;
 
@@ -28,12 +28,32 @@ export default async function login(req: NextApiRequest, res: NextApiResponse) {
         return res.status(401).json({ error: "Invalid credentials" });
       }
 
+      const userPlans = await prisma.userPlan.findMany({
+        where: {userId: user.id}
+      });
+
+      if(userPlans.length === 0){
+        const basicPlan = await prisma.plan.findUnique({
+          where: {name: "Basic"},
+        });
+
+        if (basicPlan) {
+          await prisma.userPlan.create({
+            data: {
+              userId: user.id,
+              planId: basicPlan.id,
+            },
+          });
+        }
+      }
+
       const token = jwt.sign(
         { userId: user.id, email: user.email },
         jwtSecret,
         { expiresIn: "24h" }
       );
-      return res.status(200).json({message: "Login successfully", token });
+      res.setHeader('Set-Cookie', `token=${token}; HttpOnly; Path=/; Max-Age=86400;`);
+      return res.status(200).json({message: "Login successfully", token, userId: user.id });
     } catch (err) {
       console.error(err);
       res.status(501).json({ message: "internal server error" });

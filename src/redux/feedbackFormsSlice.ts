@@ -37,7 +37,7 @@ export type FeedbackList = {
 };
 
 export type Submission = {
-  submitted?: Number;
+  submitted?: Number;  
   views?: Number;
   feedbackList?: FeedbackList[];
 };
