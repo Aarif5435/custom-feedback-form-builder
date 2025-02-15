@@ -138,7 +138,7 @@ export default function LogInComp() {
           setLoading(false);
           dispatch(getUserDetailAsync(data.userId));
           localStorage.setItem("accessTokenFD", data.token);
-          router.push(`/${data.userId}/new-dashboard`);
+          router.push(`/${data.userId}`);
         } else {
           setLoading(false);
           showToast("error", "Invalid credentials");
