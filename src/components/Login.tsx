@@ -107,17 +107,17 @@ export default function LogInComp() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
-
+  
     if (loginMethod === "password" && (!email || !password)) {
       setError("Please fill in all fields");
       return;
     }
-
+  
     if (loginMethod === "otp" && (!email || !otp)) {
       setError("Please fill in all fields");
       return;
     }
-
+  
     try {
       setLoading(true);
       if (loginMethod === "password") {
@@ -128,19 +128,20 @@ export default function LogInComp() {
           },
           body: JSON.stringify({ email, password }),
         });
-
+  
         if (res.ok) {
           const data = await res.json();
+          console.log('Login successful:', data);
           showToast("success", data.message);
           setEmail("");
           setPassword("");
           setLoading(false);
           dispatch(getUserDetailAsync(data.userId));
           localStorage.setItem("accessTokenFD", data.token);
-          router.push(`${data.userId}`);
+          router.push(`/${data.userId}/new-dashboard`);
         } else {
           setLoading(false);
-          showToast("error", "invalid credential");
+          showToast("error", "Invalid credentials");
         }
       } else {
         const res = await fetch("/api/auth/verify-otp", {
@@ -150,21 +151,21 @@ export default function LogInComp() {
           },
           body: JSON.stringify({ email, otp }),
         });
-
+  
         if (res.ok) {
           const data = await res.json();
+          console.log('OTP verification successful:', data);
           localStorage.setItem("accessTokenFD", data.token);
           showToast("success", data.message);
           dispatch(getUserDetailAsync(data.userId));
-          console.log('dataaaaaa',data)
-          router.push(`${data.userId}`);
+          router.push(`/${data.userId}`);
         } else {
           showToast("error", "Something went wrong");
         }
       }
       setLoading(false);
     } catch (err: any) {
-      console.error(err);
+      console.error('Error during login:', err);
       setLoading(false);
       setError(err);
       showToast("error", err);
