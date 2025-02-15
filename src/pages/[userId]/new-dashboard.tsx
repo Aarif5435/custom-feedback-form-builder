@@ -20,6 +20,8 @@ interface FeedbackType {
 }
 
 export default function UserFeedback() {
+  const router = useRouter();
+  const { userId } = router.query;
 
   return (
       <>
@@ -64,7 +66,7 @@ export default function UserFeedback() {
             </CardContent>
             <CardFooter className="flex justify-between">
               <Button variant="outline">Cancel</Button>
-              <Button>Create</Button>
+              <Button onClick={()=>router.push(`/${userId}/new-form-builder`)}>Create</Button>
             </CardFooter>
           </Card>
         </TabsContent>
